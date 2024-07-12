@@ -1,18 +1,17 @@
-from flask import Flask
 
-def create_app():
-    app = Flask(__name__)
+from route.llm import llm_route
+from route.code_executor import code_executor_route
+from route.shutdown import shutdown_route
+from fastapi import FastAPI
+import uvicorn
+app = FastAPI()
 
-    with app.app_context():
-        from route.code_executor import home_bp
-        app.register_blueprint(home_bp)
-        from route.shutdown import home_bp
-        app.register_blueprint(home_bp)
-        from route.llm import home_bp
-        app.register_blueprint(home_bp)
+app.include_router(llm_route)
+app.include_router(code_executor_route)
+app.include_router(shutdown_route)
 
-    return app
 
 if __name__ == "__main__":
-    app = create_app()
-    app.run(debug=True)
+    uvicorn.run(app,port=5000)
+
+# additional requirements: fastapi uvicorn

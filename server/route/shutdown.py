@@ -1,7 +1,8 @@
 import os
-from flask import Blueprint
-home_bp = Blueprint('shutdown', __name__)
-# 关闭服务器
-@home_bp.route('/shutdown', methods=["GET"])
-def home():
+from fastapi import APIRouter
+
+shutdown_route = APIRouter()
+
+@shutdown_route.get("/shutdown")
+async def shutdown():
     os._exit(0)
